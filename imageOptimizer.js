@@ -3,7 +3,8 @@
 'use strict';
 
 const options = require('commander');
-const image = require('./lib/imageManipulator');
+const im = require('./lib/imageManipulator');
+const currPath = __dirname;
 
 function number(number){
   return parseInt(number);
@@ -11,19 +12,18 @@ function number(number){
 
 options
   .version('1.0.0')
-  .option('-w, --width [width]', 'width of output image [width]', number, 1920)
-  .option('-h, --height [height]', 'height of output image', number, 1080)
-  .option('-q, --quality [quality]', 'quality of output image', number, 80)
-  .option('-b, --blur [blur]', 'blur of bg bars [50]', number, 50)
+  .option('-w, --width [width]', 'Maximum width of output image [width]', number, 1920)
+  .option('-h, --height [height]', 'Maximum height of output image', number, 1080)
+  .option('-q, --quality [quality]', 'Quality of output image', number, 80)
   .option('-f, --folder [folder]', 'Path of the source folder', 'images/src/')
   .parse(process.argv);
 
 
-image.processAll(options).then(result => {
-  console.log(result);
-}, err => {
+options.currPath = currPath;
 
+im.findImages(options).then(imageList => {
+  // imageList.map((image) => im.process(image, options).then(newImage => console.log(newImage)).catch(err => console.log(err)));
+}).catch(err => {
   if (err.code === 'ENOENT')
     console.log('ERROR:', err.errno, 'no such file or directory (', err.path,')')
-
 });
