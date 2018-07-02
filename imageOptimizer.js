@@ -22,7 +22,7 @@ options
 options.currPath = currPath;
 
 im.findImages(options).then(imageList => {
-  // imageList.map((image) => im.process(image, options).then(newImage => console.log(newImage)).catch(err => console.log(err)));
+  imageList.map((image) => im.process(image, options).then(newImage => console.log('Image successfully optimized!')).catch(err => console.log('ERROR:', err.message)));
 }).catch(err => {
   if (err.code === 'ENOENT')
     console.log('ERROR:', err.errno, 'no such file or directory (', err.path,')')
